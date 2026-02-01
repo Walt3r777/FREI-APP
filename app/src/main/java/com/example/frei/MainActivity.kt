@@ -3,30 +3,39 @@ package com.example.frei
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Scaffold
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
+import androidx.compose.runtime.*
+import androidx.navigation.compose.rememberNavController
+import com.example.frei.model.Tarefa
+import com.example.frei.model.Usuario
+import com.example.frei.navigation.AppNavHost
 import com.example.frei.ui.theme.FREITheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
+
         setContent {
             FREITheme {
-                Scaffold(
-                    modifier = Modifier.fillMaxSize()
-                ) { innerPadding ->
-                    AppNavHost(
-                        modifier = Modifier.padding(innerPadding)
-                    )
+
+                val navController = rememberNavController()
+
+                var usuarioLogado by remember {
+                    mutableStateOf<Usuario?>(null)
                 }
+
+                val listaTarefas = remember {
+                    mutableStateListOf<Tarefa>()
+                }
+
+                AppNavHost(
+                    navController = navController,
+                    usuarioLogado = usuarioLogado,
+                    onLogin = { usuarioLogado = it },
+                    onLogout = { usuarioLogado = null },
+                    listaTarefas = listaTarefas
+                )
             }
         }
-    } 
+    }
 }
-
 

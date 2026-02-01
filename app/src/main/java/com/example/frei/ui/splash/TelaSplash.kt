@@ -16,10 +16,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.example.frei.R
 
 @Composable
-fun SplashScreen(onTimeout: () -> Unit) {
-    LaunchedEffect(true) {
-        delay(6000)
-        onTimeout()
+fun TelaSplash(
+    onNavigateToLogin: () -> Unit
+) {
+    LaunchedEffect(Unit) {
+        delay(3000) // 3 segundos (mais comum para splash)
+        onNavigateToLogin()
     }
 
     Box(
@@ -29,19 +31,28 @@ fun SplashScreen(onTimeout: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
+
             Image(
                 painter = painterResource(id = R.drawable.logo),
                 contentDescription = "Logo do App",
                 modifier = Modifier.size(120.dp)
             )
+
             Spacer(modifier = Modifier.height(16.dp))
-            Spacer(modifier = Modifier.height(19.dp))
-            Text("Liberdade + Respeito + Igualdade + Empatia", fontSize = 20.sp, color = Color.Gray)
+
+            Text(
+                text = "Liberdade + Respeito + Igualdade + Empatia",
+                fontSize = 18.sp,
+                color = Color.Gray
+            )
         }
     }
 }
+
 @Preview(showBackground = true)
 @Composable
 fun SplashScreenPreview() {
-    SplashScreen(onTimeout = {})
+    TelaSplash(
+        onNavigateToLogin = {}
+    )
 }

@@ -11,93 +11,80 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.frei.ui.principal.Tarefa
 
-data class TarefaBusca(
-    val titulo: String,
-    val descricao: String
-)
-
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TelaBusca(
+    listaTarefas: List<Tarefa>, // recebendo lista de tarefas
     onVoltarClick: () -> Unit
 ) {
     var textoBusca by remember { mutableStateOf("") }
-
-    val listaTarefas = remember {
-        listOf(
-            TarefaBusca("Estudar Kotlin", "Revisar Jetpack Compose"),
-            TarefaBusca("Exercício", "Caminhada de 30 minutos"),
-            TarefaBusca("Leitura", "Ler sobre UX Design")
-        )
-    }
 
     val resultados = listaTarefas.filter {
         it.titulo.contains(textoBusca, ignoreCase = true)
     }
 
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Buscar Tarefas") },
-                colors = TopAppBarDefaults.topAppBarColors( // ✅ Substituído
-                    containerColor = Color(0xFFF3F4F6)
-                )
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(16.dp)
-        ) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(16.dp)
+    ) {
 
-            OutlinedTextField(
-                value = textoBusca,
-                onValueChange = { textoBusca = it },
-                label = { Text("Digite para buscar") },
-                modifier = Modifier.fillMaxWidth()
-            )
+        OutlinedTextField(
+            value = textoBusca,
+            onValueChange = { textoBusca = it },
+            label = { Text("Digite para buscar") },
+            modifier = Modifier.fillMaxWidth()
+        )
 
-            Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(16.dp))
 
-            LazyColumn {
-                items(resultados) { tarefa ->
-                    Card(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(vertical = 6.dp),
-                        colors = CardDefaults.cardColors(
-                            containerColor = Color.White
+        LazyColumn {
+            items(resultados) { tarefa ->
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 6.dp),
+                    colors = CardDefaults.cardColors(containerColor = Color.White)
+                ) {
+                    Column(modifier = Modifier.padding(16.dp)) {
+                        Text(
+                            text = tarefa.titulo,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 16.sp,
+                            color = Color(0xFF2563EB)
                         )
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = tarefa.titulo,
-                                fontWeight = FontWeight.Bold,
-                                fontSize = 16.sp,
-                                color = Color(0xFF2563EB)
-                            )
-                            Spacer(modifier = Modifier.height(4.dp))
-                            Text(
-                                text = tarefa.descricao,
-                                fontSize = 14.sp,
-                                color = Color.Gray
-                            )
-                        }
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = tarefa.descricao,
+                            fontSize = 14.sp,
+                            color = Color.Gray
+                        )
                     }
                 }
             }
         }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = onVoltarClick,
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
+        ) {
+            Text("Voltar", color = Color.White)
+        }
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
 fun TelaBuscaPreview() {
-    MaterialTheme {
-        TelaBusca(onVoltarClick = {})
-    }
+    TelaBusca(
+        listaTarefas = listOf(
+            Tarefa("Exemplo 1", "Descrição 1"),
+            Tarefa("Exemplo 2", "Descrição 2")
+        ),
+        onVoltarClick = {}
+    )
 }

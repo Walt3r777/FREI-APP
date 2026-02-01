@@ -11,66 +11,56 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
-@OptIn(ExperimentalMaterial3Api::class)
+data class Usuario(
+    val nome: String,
+    val email: String
+)
+
 @Composable
 fun TelaPerfil(
-    nomeUsuario: String = "Onecas Benedito",
-    emailUsuario: String = "Onecas.Benedito@email.com",
+    usuario: Usuario?, // dados dinâmicos
     onLogoutClick: () -> Unit
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("Perfil do Usuário") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Color(0xFFF3F4F6)
-                )
-            )
-        }
-    ) { padding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(padding)
-                .padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(24.dp),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Top
+    ) {
+        Spacer(modifier = Modifier.height(24.dp))
+
+        Text(
+            text = usuario?.nome ?: "Carregando...",
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            color = Color(0xFF2563EB)
+        )
+
+        Spacer(modifier = Modifier.height(8.dp))
+
+        Text(
+            text = usuario?.email ?: "",
+            fontSize = 16.sp,
+            color = Color.Gray
+        )
+
+        Spacer(modifier = Modifier.height(32.dp))
+
+        Button(
+            onClick = onLogoutClick,
+            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
         ) {
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            Text(
-                text = nomeUsuario,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color(0xFF2563EB)
-            )
-
-            Spacer(modifier = Modifier.height(8.dp))
-
-            Text(
-                text = emailUsuario,
-                fontSize = 16.sp,
-                color = Color.Gray
-            )
-
-            Spacer(modifier = Modifier.height(32.dp))
-
-            Button(
-                onClick = onLogoutClick,
-                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF10B981))
-            ) {
-                Text("Sair", color = Color.White)
-            }
+            Text("Sair", color = Color.White)
         }
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun TelaPerfilPreview() {
-    MaterialTheme {
-        TelaPerfil(onLogoutClick = {})
-    }
+    TelaPerfil(
+        usuario = Usuario("Onecas Benedito", "Onecas.Benedito@email.com"),
+        onLogoutClick = {}
+    )
 }
